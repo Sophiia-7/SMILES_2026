@@ -23,21 +23,15 @@ class HallucinationProbe(nn.Module):
 
     def _build_network(self, input_dim: int) -> None:
         self._net = nn.Sequential(
-            nn.Linear(input_dim, 512),
-            nn.BatchNorm1d(512),
+            nn.Linear(input_dim, 128),
             nn.ReLU(),
-            nn.Dropout(0.35),
+            nn.Dropout(0.5),
 
-            nn.Linear(512, 256),
-            nn.BatchNorm1d(256),
+            nn.Linear(128, 32),
             nn.ReLU(),
-            nn.Dropout(0.3),
+            nn.Dropout(0.4),
 
-            nn.Linear(256, 64),
-            nn.ReLU(),
-            nn.Dropout(0.2),
-
-            nn.Linear(64, 1),
+            nn.Linear(32, 1),
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -52,7 +46,7 @@ class HallucinationProbe(nn.Module):
         X_scaled = self._scaler.fit_transform(X)
 
         n_components = min(
-            256,
+            32,
             X_scaled.shape[0] - 1,
             X_scaled.shape[1],
         )
@@ -95,7 +89,7 @@ class HallucinationProbe(nn.Module):
 
         self.train()
 
-        for _ in range(300):
+        for _ in range(80):
             optimizer.zero_grad()
 
             logits = self(X_t)

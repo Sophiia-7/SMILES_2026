@@ -8,41 +8,25 @@ def aggregate(
     hidden_states: torch.Tensor,
     attention_mask: torch.Tensor,
 ) -> torch.Tensor:
+
     valid_len = int(attention_mask.sum().item())
 
     hs = hidden_states[:, :valid_len, :]
 
-    selected_layers = [
+    selected = [
         hs[-1],
-        hs[-2],
         hs[-4],
         hs[-8],
     ]
 
     pooled = []
 
-    for layer in selected_layers:
+    for layer in selected:
         mean_pool = layer.mean(dim=0)
-
-        max_pool = layer.max(dim=0).values
-
         last_token = layer[-1]
 
-        attention_scores = torch.norm(layer, dim=-1)
-        attention_weights = torch.softmax(attention_scores, dim=0)
-        weighted_pool = (layer * attention_weights.unsqueeze(-1)).sum(dim=0)
-
-        pooled.append(
-            torch.cat(
-                [
-                    mean_pool,
-                    max_pool,
-                    last_token,
-                    weighted_pool,
-                ],
-                dim=0,
-            )
-        )
+        pooled.append(mean_pool)
+        pooled.append(last_token)
 
     return torch.cat(pooled, dim=0)
 
