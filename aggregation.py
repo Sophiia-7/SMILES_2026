@@ -15,8 +15,8 @@ def aggregate(
 
     selected = [
         hs[-1],
+        hs[-2],
         hs[-4],
-        hs[-8],
     ]
 
     pooled = []
@@ -71,16 +71,11 @@ def extract_geometric_features(
 
     final_layer = hs[-1]
 
-    covariance_trace = torch.trace(
-        torch.cov(final_layer.T)
-    )
-
     global_mean = final_layer.mean()
     global_std = final_layer.std()
 
     features.extend(
         [
-            covariance_trace,
             global_mean,
             global_std,
             torch.tensor(float(valid_len), device=device),
