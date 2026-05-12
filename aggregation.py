@@ -55,6 +55,8 @@ def extract_geometric_features(
 
     hs = hidden_states[:, :valid_len, :]
 
+    device = hs.device
+
     features = []
 
     for layer in hs:
@@ -97,11 +99,11 @@ def extract_geometric_features(
             covariance_trace,
             global_mean,
             global_std,
-            torch.tensor(float(valid_len)),
+            torch.tensor(float(valid_len), device=device),
         ]
     )
 
-    return torch.stack([f.float() for f in features])
+    return torch.stack(features).float()
 
 
 def aggregation_and_feature_extraction(
