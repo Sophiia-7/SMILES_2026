@@ -148,7 +148,7 @@ def extract_geometric_features(
 def aggregation_and_feature_extraction(
     hidden_states: torch.Tensor,
     attention_mask: torch.Tensor,
-    use_geometric: bool = False,
+    use_geometric: bool = True,
 ) -> torch.Tensor:
     """Aggregate hidden states and optionally append geometric features.
 

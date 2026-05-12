@@ -46,22 +46,22 @@ class HallucinationProbe(nn.Module):
             input_dim: Feature vector dimensionality.
         """
         self._net = nn.Sequential(
-            nn.Linear(input_dim, 256),
-            nn.BatchNorm1d(256),
-            nn.ReLU(),
-            nn.Dropout(0.3),
-            
-            nn.Linear(256, 128),
-            nn.BatchNorm1d(128),
-            nn.ReLU(),
-            nn.Dropout(0.2),
-            
-            nn.Linear(128, 32),
-            nn.BatchNorm1d(32),
-            nn.ReLU(),
-            
-            nn.Linear(32, 1),
-        )
+        nn.Linear(input_dim, 128),
+        nn.BatchNorm1d(128),
+        nn.ReLU(),
+        nn.Dropout(0.5),
+        
+        nn.Linear(128, 64),
+        nn.BatchNorm1d(64),
+        nn.ReLU(),
+        nn.Dropout(0.4),
+        
+        nn.Linear(64, 16),
+        nn.BatchNorm1d(16),
+        nn.ReLU(),
+        
+        nn.Linear(16, 1),
+    )
 
     def _apply_dimensionality_reduction(self, X: np.ndarray, y: np.ndarray | None = None) -> np.ndarray:
         """Apply PCA and optionally LDA for dimensionality reduction.
